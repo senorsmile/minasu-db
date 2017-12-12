@@ -23,6 +23,11 @@ class TestMinamu(unittest.TestCase):
         self.instance_name="testdb"
         self.instance_dir="./tests"
 
+        self.test_instance = db(
+            self.instance_name,
+            self.instance_dir,
+        )
+
     #def test_default_settings(self):
     #    print("****** Default settings")
     #    print(yaml.dump(settings.default_settings, default_flow_style=False))
@@ -30,16 +35,16 @@ class TestMinamu(unittest.TestCase):
 
 
     def test_create_instance(self):
-        results = db.create(self.instance_name, self.instance_dir)
+        results = self.test_instance.create()
         #print(yaml.dump(results, default_flow_style=False))
         self.assertTrue(results["created"])
 
     def test_create_instance_exists(self):
-        results = db.create(self.instance_name, self.instance_dir)
+        results = self.test_instance.create()
         self.assertFalse(results["created"])
 
     def test_destroy_instance(self):
-        results = db.destroy(self.instance_name, self.instance_dir)
+        results = self.test_instance.destroy()
         self.assertTrue(results["destroyed"])
         
 
