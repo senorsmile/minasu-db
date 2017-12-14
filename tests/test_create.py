@@ -36,12 +36,12 @@ class TestMinamu(unittest.TestCase):
     #     print()
 
     def test_create_instance(self):
-        results = self.test_instance.create()
+        results = self.test_instance.load()
         # print(yaml.dump(results, default_flow_style=False))
         self.assertTrue(results["created"])
 
     def test_create_instance_exists(self):
-        results = self.test_instance.create()
+        results = self.test_instance.load()
         self.assertFalse(results["created"])
 
     def test_destroy_instance(self):
