@@ -1,5 +1,7 @@
 from minasu import settings
 import os, shutil, yaml
+import psutil
+import sys
 
 
 class db():
@@ -12,13 +14,22 @@ class db():
         self.instance_dir  = instance_dir
         self.instance_path = self.instance_dir + "/" + self.instance_name
 
+        program = (instance_name in (p.name() for p in psutil.process_iter()))
+        lock_dir = '/tmp/minasu/' + instance_name
+        if os.path.exists(lock_dir) or program:
+            print("Minasu instance: %s, is already running" % instance_name)
+            print("Exiting")
+            sys.exit()
+        else:
+            os.mkdir(lock_dir)
+
+
     # create a new db at folder location
     # def load(self) -> results[JSON]:
     # create path if doesn't exist
     # for each dir (bucket)
     #     for each yml file
     #         yaml.load()
-    # mkdir lockdir
 
     def load(self):
         data = {}
