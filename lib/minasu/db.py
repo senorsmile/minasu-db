@@ -64,6 +64,10 @@ class db():
                                 buckets[bucket][item] = yaml.safe_load(stream)
                             except yaml.YAMLError as exc:
                                 print(exc)
+                                print("Exiting")
+                                print("Unable to open %s" % item)
+                                print("Verify that %s contains valid yaml" % item)
+                                sys.exit()
 
             self.data["buckets"] = buckets
 
