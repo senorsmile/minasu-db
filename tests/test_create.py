@@ -31,7 +31,7 @@ class TestMinamu(unittest.TestCase):
     def setUp(self):
         self.instance_name = "testdb"
         self.instance_dir = "./tests"
-        self.instance_path = "./tests/testdb"
+        self.instance_path = self.instance_dir + "/" + self.instance_name
 
         self.test_instance = db(
             self.instance_name,
@@ -44,7 +44,7 @@ class TestMinamu(unittest.TestCase):
     #     print()
 
     def test_load_instance_create(self):
-        ''' Create a fresh instance
+        '''Create a fresh instance
 
         Testing if instance directory is create on load
         '''
@@ -55,8 +55,8 @@ class TestMinamu(unittest.TestCase):
 
     def test_load_instance_exists(self):
         os.makedirs(self.instance_path + "/bucket1")
-        with open(self.instance_path + "/bucket1/" + "file1.yml", "w") as outfile:
-            yaml.dump(test_data, outfile, default_flow_style=False)
+        outfile = open(self.instance_path + "/bucket1/" + "file1.yml", "w")
+        yaml.dump(test_data, outfile, default_flow_style=False)
         results = self.test_instance.load()
         self.test_instance.destroy()
         self.assertEqual(results['buckets']['bucket1']['file1.yml'], test_data)
