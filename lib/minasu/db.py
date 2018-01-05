@@ -13,15 +13,20 @@ class db():
         self.instance_name = instance_name
         self.instance_dir  = instance_dir
         self.instance_path = self.instance_dir + "/" + self.instance_name
+        self.data = {}
 
-        program = (instance_name in (p.name() for p in psutil.process_iter()))
-        lock_dir = '/tmp/minasu/' + instance_name
+    def lock():
+        '''Temporary method to store lock logic
+
+        '''
+        program = (self.instance_name in (p.name() for p in psutil.process_iter()))
+        lock_dir = '/tmp/minasu/' + self.instance_name
         if os.path.exists(lock_dir) or program:
-            print("Minasu instance: %s, is already running" % instance_name)
+            print("Minasu instance: %s, is already running" % self.instance_name)
             print("Exiting")
             sys.exit()
         else:
-            os.mkdir(lock_dir)
+            os.makedirs(lock_dir)
 
 
     # create a new db at folder location
@@ -32,10 +37,10 @@ class db():
     #         yaml.load()
 
     def load(self):
-        data = {}
-        data["instance_name"] = self.instance_name
-        data["instance_dir"]  = self.instance_dir + "/"
-        data["instance_path"] = self.instance_path + "/"
+        self.data["instance_name"] = self.instance_name
+        self.data["instance_dir"]  = self.instance_dir + "/"
+        self.data["instance_path"] = self.instance_path + "/"
+        instance = {}
 
         if not os.path.exists(self.instance_path):
             try:
@@ -43,10 +48,10 @@ class db():
             except OSError as e:
                 if e.errno != errno.EEXIST:
                     raise
-            data["created"] = True
+            instance["created"] = True
 
         else:
-            data["created"] = False
+            instance["created"] = False
             buckets = {}
             list_of_buckets = os.listdir(self.instance_path)
             for bucket in list_of_buckets:
@@ -58,9 +63,10 @@ class db():
                             except yaml.YAMLError as exc:
                                 print(exc)
 
-            data["buckets"] = buckets
+            self.data["buckets"] = buckets
 
-        return data
+        return instance
+
 
     def destroy(self):
         '''Recursively remove a directory and all of its contents
