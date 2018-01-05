@@ -55,9 +55,11 @@ class db():
             buckets = {}
             list_of_buckets = os.listdir(self.instance_path)
             for bucket in list_of_buckets:
-                for item in bucket:
+                bucket_path = self.instance_path + "/" + bucket + "/"
+                for item in os.listdir(bucket_path):
                     if item.lower().endswith(('.yml', '.yaml')):
-                        with open(self.instance_path + bucket + item, 'r') as stream:
+                        buckets[bucket] = {}
+                        with open(bucket_path + item, 'r') as stream:
                             try:
                                 buckets[bucket][item] = yaml.safe_load(stream)
                             except yaml.YAMLError as exc:
@@ -65,8 +67,7 @@ class db():
 
             self.data["buckets"] = buckets
 
-        return instance
-
+        return self.data
 
     def destroy(self):
         '''Recursively remove a directory and all of its contents
@@ -82,3 +83,9 @@ class db():
             data["destroyed"] = False
 
         return data
+
+    def unload():
+        ''''Verify that queue is empty and remove lockdir
+
+        '''
+        pass

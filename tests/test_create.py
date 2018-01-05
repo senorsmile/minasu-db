@@ -19,11 +19,19 @@ from minasu    import settings
 # main tests
 # -----------------
 
+# Set test data
+test_data = dict(
+  A='a',
+  B='b',
+  C='c'
+)
+
 
 class TestMinamu(unittest.TestCase):
     def setUp(self):
         self.instance_name = "testdb"
         self.instance_dir = "./tests"
+        self.instance_path = "./tests/testdb"
 
         self.test_instance = db(
             self.instance_name,
@@ -35,18 +43,29 @@ class TestMinamu(unittest.TestCase):
     #     print(yaml.dump(settings.default_settings, default_flow_style=False))
     #     print()
 
-    def test_create_instance(self):
-        results = self.test_instance.load()
-        # print(yaml.dump(results, default_flow_style=False))
-        self.assertTrue(results["created"])
+    def test_load_instance_create(self):
+        ''' Create a fresh instance
 
-    def test_create_instance_exists(self):
+        Testing if instance directory is create on load
+        '''
+        self.test_instance.load()
+        result = os.path.exists(self.instance_path)
+        self.test_instance.destroy()
+        self.assertTrue(result)
+
+    def test_load_instance_exists(self):
+        os.makedirs(self.instance_path + "/bucket1")
+        with open(self.instance_path + "/bucket1/" + "file1.yml", "w") as outfile:
+            yaml.dump(test_data, outfile, default_flow_style=False)
         results = self.test_instance.load()
-        self.assertFalse(results["created"])
+        self.test_instance.destroy()
+        self.assertEqual(results['buckets']['bucket1']['file1.yml'], test_data)
 
     def test_destroy_instance(self):
-        results = self.test_instance.destroy()
-        self.assertTrue(results["destroyed"])
+        self.test_instance.load()
+        result = os.path.exists(self.instance_path)
+        self.test_instance.destroy()
+        self.assertTrue(result)
 
 if __name__ == '__main__':
     unittest.main()
