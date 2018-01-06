@@ -67,7 +67,7 @@ class db():
                                 print("Exiting")
                                 print("Unable to open %s" % item)
                                 print("Verify that %s contains valid yaml" % item)
-                                sys.exit()
+                                sys.exit(1)
 
             self.data["buckets"] = buckets
 
