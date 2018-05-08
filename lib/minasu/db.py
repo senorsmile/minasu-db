@@ -93,6 +93,9 @@ class db():
         - verify that queue is empty 
         - remove lockdir
         - clear self.data
+        - manually close the open file?
+          # when running tox we get:
+          # /home/shaun/.pyenv/versions/3.6.3/lib/python3.6/unittest/case.py:605: ResourceWarning: unclosed file <_io.TextIOWrapper name='./tests/testdb/bucket1/file1.yml' mode='w' encoding='UTF-8'>
 
         '''
         pass
