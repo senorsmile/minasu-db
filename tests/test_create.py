@@ -51,8 +51,10 @@ class TestMinamu(unittest.TestCase):
         '''
         self.test_instance.load()
         result = os.path.exists(self.instance_path)
-        self.test_instance.destroy()
         self.assertTrue(result)
+
+        # clean up at the end
+        self.test_instance.destroy()
 
     def test_load_instance_exists(self):
         ###################
