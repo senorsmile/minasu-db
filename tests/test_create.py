@@ -44,7 +44,8 @@ class TestMinamu(unittest.TestCase):
     #     print()
 
     def test_load_instance_create(self):
-        '''Create a fresh instance
+        '''
+        Create a fresh instance
 
         Testing if instance directory is created on load
         '''
@@ -54,9 +55,16 @@ class TestMinamu(unittest.TestCase):
         self.assertTrue(result)
 
     def test_load_instance_exists(self):
+        ###################
+        # TODO:
+        #   These lines should be a single api call, 
+        #   instead of doing it directly in this test below.
+        ###################
         os.makedirs(self.instance_path + "/bucket1")
         outfile = open(self.instance_path + "/bucket1/" + "file1.yml", "w")
         yaml.dump(test_data, outfile, default_flow_style=False)
+        ###################
+
         results = self.test_instance.load()
         self.test_instance.destroy()
         self.assertEqual(results['buckets']['bucket1']['file1.yml'], test_data)
