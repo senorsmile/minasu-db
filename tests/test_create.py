@@ -46,7 +46,7 @@ class TestMinamu(unittest.TestCase):
     def test_load_instance_create(self):
         '''Create a fresh instance
 
-        Testing if instance directory is create on load
+        Testing if instance directory is created on load
         '''
         self.test_instance.load()
         result = os.path.exists(self.instance_path)
