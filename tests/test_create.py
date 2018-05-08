@@ -43,39 +43,59 @@ class TestMinamu(unittest.TestCase):
     #     print(yaml.dump(settings.default_settings, default_flow_style=False))
     #     print()
 
-    def test_load_instance_create(self):
+    def test_instance_load_create(self):
         '''
         Create a fresh instance
-
-        Testing if instance directory is created on load
         '''
         self.test_instance.load()
-        result = os.path.exists(self.instance_path)
-        self.assertTrue(result)
 
-        # clean up at the end
-        self.test_instance.destroy()
 
-    def test_load_instance_exists(self):
+    def test_instance_path_exists(self):
+        '''
+        Test that the instance's dir path exists
+        '''
+        instance_path_exists = os.path.exists(self.instance_path)
+        self.assertTrue(instance_path_exists)
+
+
+    def test_bucket_create(self):
         ###################
         # TODO:
         #   These lines should be a single api call, 
-        #   instead of doing it directly in this test below.
-        ###################
-        os.makedirs(self.instance_path + "/bucket1")
-        outfile = open(self.instance_path + "/bucket1/" + "file1.yml", "w")
-        yaml.dump(test_data, outfile, default_flow_style=False)
+        #   instead of doing it directly in this test below?
         ###################
 
+        bucket_path = self.instance_path + "/bucket1"
+
+        # create the bucket dir
+        if not os.path.exists(bucket_path):
+            os.makedirs(bucket_path)
+
+        # open file, and write test_data to it
+        outfile = open(bucket_path + "/file1.yml", "w")
+        yaml.dump(test_data, outfile, default_flow_style=False)
+
+        ###################
+
+        # reload
         results = self.test_instance.load()
-        self.test_instance.destroy()
+
+        # verify test_data matches
         self.assertEqual(results['buckets']['bucket1']['file1.yml'], test_data)
 
     def test_destroy_instance(self):
-        self.test_instance.load()
-        result = os.path.exists(self.instance_path)
-        self.test_instance.destroy()
-        self.assertTrue(result)
+        # first test that the instance path exists
+        instance_exists_result = os.path.exists(self.instance_path)
+        self.assertTrue(instance_exists_result)
+
+        # then attempt to destroy the instance
+            #TODO: this is not working... the subdirs remove but the main dir remains!
+        destroyed_data = self.test_instance.destroy()
+        self.assertTrue(destroyed_data["destroyed"])
+
+        # finally test that the instance path does NOT exist
+        instance_exists_result2 = os.path.exists(self.instance_path)
+        self.assertFalse(instance_exists_result2)
 
 if __name__ == '__main__':
     unittest.main()

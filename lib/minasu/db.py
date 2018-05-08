@@ -89,7 +89,10 @@ class db():
         return data
 
     def unload():
-        ''''Verify that queue is empty and remove lockdir
+        ''''
+        - verify that queue is empty 
+        - remove lockdir
+        - clear self.data
 
         '''
         pass
