@@ -60,7 +60,8 @@ class TestMinamu(unittest.TestCase):
         # Verify does NOT exist (any more)
         self.assertFalse(os.path.exists(self.instance_path))
 
-
+    ## TODO: move this into a separate test
+    ##       once the bucker methods are written
 #    def test_bucket_create(self):
 #        ###################
 #        # TODO:
