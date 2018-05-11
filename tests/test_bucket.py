@@ -46,12 +46,6 @@ class TestMinamu(unittest.TestCase):
 
 
     def test_bucket_create(self):
-        ###################
-        # TODO:
-        #   These lines should be a single api call, 
-        #   instead of doing it directly in this test below?
-        ###################
-
         # Verify does NOT exist (yet)
         self.assertFalse(os.path.exists(self.instance_path))
 
@@ -62,10 +56,12 @@ class TestMinamu(unittest.TestCase):
         self.assertTrue(os.path.exists(self.instance_path))
 
         # create the bucket dir
+        #   TODO: use method instead of manual creation here
         if not os.path.exists(self.bucket_path):
             os.makedirs(self.bucket_path)
 
         # open file, and write test_data to it
+        #   TODO: move file writing to "item" methods testing
         outfile = open(self.bucket_path + "/file1.yml", "w")
         yaml.dump(test_data, outfile, default_flow_style=False)
 
