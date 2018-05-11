@@ -26,6 +26,26 @@ test_data = dict(
   C='c'
 )
 
+def instance_load(obj):
+    # Verify does NOT exist (yet)
+    obj.assertFalse(os.path.exists(obj.instance_path))
+
+    # Create a fresh instance
+    obj.test_instance.load()
+
+    # Verify instance DOES exist
+    obj.assertTrue(os.path.exists(obj.instance_path))
+
+
+def instance_destroy(obj):
+    # destroy the instance
+    destroyed_data = obj.test_instance.destroy()
+    obj.assertTrue(destroyed_data["destroyed"])
+
+    # Verify does NOT exist (any more)
+    obj.assertFalse(os.path.exists(obj.instance_path))
+
+
 class TestMinamu(unittest.TestCase):
     def setUp(self):
         self.instance_name = "test_instance"
@@ -41,31 +61,12 @@ class TestMinamu(unittest.TestCase):
 
 
     def test_instance_load_create_destroy(self):
-        # Verify does NOT exist (yet)
-        self.assertFalse(os.path.exists(self.instance_path))
+        instance_load(self)
+        instance_destroy(self)
 
-        # Create a fresh instance
-        self.test_instance.load()
-
-        # Verify instance DOES exist
-        self.assertTrue(os.path.exists(self.instance_path))
-
-        # destroy the instance
-        destroyed_data = self.test_instance.destroy()
-        self.assertTrue(destroyed_data["destroyed"])
-
-        # Verify does NOT exist (any more)
-        self.assertFalse(os.path.exists(self.instance_path))
 
     def test_bucket_create(self):
-        # Verify does NOT exist (yet)
-        self.assertFalse(os.path.exists(self.instance_path))
-
-        # Create a fresh instance
-        self.test_instance.load()
-
-        # Verify instance DOES exist
-        self.assertTrue(os.path.exists(self.instance_path))
+        instance_load(self)
 
         # create the bucket dir
         #   TODO: use method instead of manual creation here
@@ -88,15 +89,8 @@ class TestMinamu(unittest.TestCase):
 
 
 
+        instance_destroy(self)
 
-
-
-        # destroy the instance
-        destroyed_data = self.test_instance.destroy()
-        self.assertTrue(destroyed_data["destroyed"])
-
-        # Verify does NOT exist (any more)
-        self.assertFalse(os.path.exists(self.instance_path))
 
 if __name__ == '__main__':
     unittest.main()
