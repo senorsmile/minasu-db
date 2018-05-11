@@ -5,5 +5,4 @@
 #  pip install pipenv
 #}
 
-pipenv run python tests/test_instance.py
-pipenv run python tests/test_bucket.py
+pipenv run python tests/tests.py
