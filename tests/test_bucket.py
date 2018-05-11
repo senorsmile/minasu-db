@@ -13,7 +13,9 @@ import unittest
 # get realpath, go up dir then add lib to sys.path
 sys.path.append(os.path.dirname(os.path.realpath(__file__)).rsplit("/",1)[0] + '/lib/')
 from minasu.db import db
+#from minasu.bucket import bucket
 from minasu    import settings
+
 
 # -----------------
 # main tests
@@ -27,9 +29,11 @@ test_data = dict(
 )
 
 
+
 class TestMinamu(unittest.TestCase):
+
     def setUp(self):
-        self.instance_name = "testdb"
+        self.instance_name = "test_instance"
         self.instance_dir = "./tests"
         self.instance_path = self.instance_dir + "/" + self.instance_name
 
@@ -38,12 +42,16 @@ class TestMinamu(unittest.TestCase):
             self.instance_dir,
         )
 
-    # def test_default_settings(self):
-    #     print("****** Default settings")
-    #     print(yaml.dump(settings.default_settings, default_flow_style=False))
-    #     print()
+        self.bucket_path = self.instance_path + "/bucket1"
 
-    def test_instance_load_create_destroy(self):
+
+    def test_bucket_create(self):
+        ###################
+        # TODO:
+        #   These lines should be a single api call, 
+        #   instead of doing it directly in this test below?
+        ###################
+
         # Verify does NOT exist (yet)
         self.assertFalse(os.path.exists(self.instance_path))
 
@@ -53,12 +61,38 @@ class TestMinamu(unittest.TestCase):
         # Verify instance DOES exist
         self.assertTrue(os.path.exists(self.instance_path))
 
+        # create the bucket dir
+        if not os.path.exists(self.bucket_path):
+            os.makedirs(self.bucket_path)
+
+        # open file, and write test_data to it
+        outfile = open(self.bucket_path + "/file1.yml", "w")
+        yaml.dump(test_data, outfile, default_flow_style=False)
+
+        # reload
+        results = self.test_instance.load()
+
+        print(results)
+
+        # verify test_data matches
+        self.assertEqual(results['buckets']['bucket1']['file1.yml'], test_data)
+
+
+
+
+
+
         # destroy the instance
         destroyed_data = self.test_instance.destroy()
         self.assertTrue(destroyed_data["destroyed"])
 
         # Verify does NOT exist (any more)
         self.assertFalse(os.path.exists(self.instance_path))
+
+
+
+
+
 
 
 if __name__ == '__main__':
