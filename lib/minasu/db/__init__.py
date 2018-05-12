@@ -1,6 +1,7 @@
-from minasu import settings
+from .. import settings
+from ..db import bucket as bucket_module
 import os, shutil, yaml
-import psutil
+#import psutil # no longer used?
 import sys
 
 
@@ -88,7 +89,7 @@ class db():
 
         return data
 
-    def unload():
+    def unload(self):
         ''''
         - verify that queue is empty 
         - remove lockdir
@@ -99,3 +100,11 @@ class db():
 
         '''
         pass
+    
+
+    def bucket(
+        self,
+        bucket_name=None
+    ):
+        return bucket_module.bucket(self,bucket_name)
+

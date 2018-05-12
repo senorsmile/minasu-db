@@ -12,7 +12,7 @@ import unittest
 # -----------------
 # get realpath, go up dir then add lib to sys.path
 sys.path.append(os.path.dirname(os.path.realpath(__file__)).rsplit("/",1)[0] + '/lib/')
-from minasu.db import db
+from minasu.db import db,bucket
 from minasu    import settings
 
 # -----------------
@@ -46,6 +46,26 @@ def instance_destroy(obj):
     obj.assertFalse(os.path.exists(obj.instance_path))
 
 
+def bucket_create(obj):
+        # Verify bucket does NOT exist
+        obj.assertFalse(os.path.exists(obj.bucket_path))
+
+        # create bucket
+        obj.test_instance.bucket(obj.bucket_name).create()
+
+        # Verify bucket DOES exist
+        obj.assertTrue(os.path.exists(obj.bucket_path))
+
+
+def bucket_destroy(obj):
+        # destroy bucket
+        obj.test_instance.bucket(obj.bucket_name).destroy()
+
+        # Verify bucket does NOT exist
+        obj.assertFalse(os.path.exists(obj.bucket_path))
+
+
+
 class TestMinamu(unittest.TestCase):
     def setUp(self):
         self.instance_name = "test_instance"
@@ -57,7 +77,8 @@ class TestMinamu(unittest.TestCase):
             self.instance_dir,
         )
 
-        self.bucket_path = self.instance_path + "/bucket1"
+        self.bucket_name = "bucket1"
+        self.bucket_path = self.instance_path + "/" + self.bucket_name
 
 
     def test_instance_load_create_destroy(self):
@@ -65,27 +86,30 @@ class TestMinamu(unittest.TestCase):
         instance_destroy(self)
 
 
-    def test_bucket_create(self):
+    def test_bucket_create_destroy(self):
         instance_load(self)
 
         # create the bucket dir
-        #   TODO: use method instead of manual creation here
-        if not os.path.exists(self.bucket_path):
-            os.makedirs(self.bucket_path)
+        ##if not os.path.exists(self.bucket_path):
+        ##    os.makedirs(self.bucket_path)
+        bucket_create(self)
+        bucket_destroy(self)
 
-        # open file, and write test_data to it
-        #   TODO: move file writing to "item" methods testing
-        outfile = open(self.bucket_path + "/file1.yml", "w")
-        yaml.dump(test_data, outfile, default_flow_style=False)
 
-        # reload
-        results = self.test_instance.load()
-
-        print("****** bucket test results")
-        print(results)
-
-        # verify test_data matches
-        self.assertEqual(results['buckets']['bucket1']['file1.yml'], test_data)
+    # TODO: refactor below into item method testing
+#        # open file, and write test_data to it
+#        #   TODO: move file writing to "item" methods testing
+#        outfile = open(self.bucket_path + "/file1.yml", "w")
+#        yaml.dump(test_data, outfile, default_flow_style=False)
+#
+#        # reload
+#        results = self.test_instance.load()
+#
+#        print("****** bucket test results")
+#        print(results)
+#
+#        # verify test_data matches
+#        self.assertEqual(results['buckets']['bucket1']['file1.yml'], test_data)
 
 
 
