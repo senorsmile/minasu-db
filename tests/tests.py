@@ -118,9 +118,10 @@ class TestMinamu(unittest.TestCase):
         instance_load(self)
 
         bucket_create(self)
-        bucket_item.item_edit(self.bucket_path, self.bucket_item)
-
+        bucket_item.bucket_item.item_edit(self.bucket_path, self.bucket_item)
+        bucket_item.bucket_item.item_delete(self.bucket_path, self.bucket_item)
         bucket_destroy(self)
+        instance_destroy(self)
 
 
 if __name__ == '__main__':

@@ -4,14 +4,13 @@ import os
 class bucket_item():
     ''' bucket_item exposes operation interfaces to the items in the bucket
     '''
-    # not sure we need this yet
-    # def __init__(
-    #      self,
-    #      bucket_name,
-    #      bucket_path
-    # ):
-    #     self.bucket_name = bucket_name
-    #     self.bucket_path = bucket_path
+    def __init__(
+         self,
+         bucket_name,
+         bucket_path
+    ):
+        self.bucket_name = bucket_name
+        self.bucket_path = bucket_path
 
     def item_list(bucket_path):
         ''' list all the items in the bucket
@@ -36,5 +35,5 @@ class bucket_item():
     def item_delete(bucket_path, item):
         ''' delete item in the bucket
         '''
-        os.remove(bucket_path + "/" + item)
+        os.remove(bucket_path + "/" + item + ".yml")
         return True
