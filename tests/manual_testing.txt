@@ -1,0 +1,26 @@
+#########################
+# manual testing
+#########################
+
+from lib.minasu.db import db
+
+
+
+instance = db(instance_name="test_instance",instance_dir="/tmp/tests")
+
+dir(instance)
+
+instance.load()
+
+instance.bucket("bucket5").create()
+instance.bucket().list()
+instance.bucket("bucket5").destroy()
+instance.bucket().list()
+
+bucket6 = instance.bucket("bucket6")
+bucket6.create()
+bucket6.list() # lists ALL buckets
+bucket6.destroy()
+bucket6.list() # still lists all buckets
+
+instance.destroy()
