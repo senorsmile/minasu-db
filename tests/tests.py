@@ -12,7 +12,7 @@ import unittest
 # -----------------
 # get realpath, go up dir then add lib to sys.path
 sys.path.append(os.path.dirname(os.path.realpath(__file__)).rsplit("/",1)[0] + '/lib/')
-from minasu.db import db,bucket
+from minasu.db import db, bucket, bucket_item
 from minasu    import settings
 
 # -----------------
@@ -79,6 +79,7 @@ class TestMinamu(unittest.TestCase):
 
         self.bucket_name = "bucket1"
         self.bucket_path = self.instance_path + "/" + self.bucket_name
+        self.bucket_item = "file1"
 
 
     def test_instance_load_create_destroy(self):
@@ -111,9 +112,15 @@ class TestMinamu(unittest.TestCase):
 #        # verify test_data matches
 #        self.assertEqual(results['buckets']['bucket1']['file1.yml'], test_data)
 
-
-
         instance_destroy(self)
+
+    def test_item_create_destroy(self):
+        instance_load(self)
+
+        bucket_create(self)
+        bucket_item.item_edit(self.bucket_path, self.bucket_item)
+
+        bucket_destroy(self)
 
 
 if __name__ == '__main__':
