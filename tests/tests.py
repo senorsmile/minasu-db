@@ -65,10 +65,17 @@ def item_create(obj):
         # create bucket
         obj.test_instance.bucket(obj.bucket_name).create()
         # create item
-        obj.test_instance.bucket().item(obj.item_name).create()
+        obj.test_instance.bucket(obj.bucket_name).item(obj.item_name).edit()
 
-        # Verify bucket DOES exist
-        obj.assertTrue(os.path.exists(obj.bucket_path.item_path))
+        # Verify item DOES exist
+        obj.assertTrue(os.path.exists(obj.item_path), msg=obj.item_path)
+
+
+def item_destroy(obj):
+        # destroy item
+        obj.test_instance.bucket(obj.bucket_name).item(obj.item_name).delete()
+        # Verify item does NOT exist
+        obj.assertFalse(os.path.exists(obj.item_path))
 
 
 def bucket_destroy(obj):
@@ -92,8 +99,8 @@ class TestMinamu(unittest.TestCase):
 
         self.bucket_name = "bucket1"
         self.bucket_path = self.instance_path + "/" + self.bucket_name
-        self.bucket_item = "file1"
-        self.item_path = self.bucket_path + "/" + self.bucket_item + ".yml"
+        self.item_name = "file1"
+        self.item_path = self.bucket_path + "/" + self.item_name + ".yml"
 
 
     def test_instance_load_create_destroy(self):
@@ -134,7 +141,7 @@ class TestMinamu(unittest.TestCase):
         bucket_create(self)
 
         item_create(self)
-        #item_destroy(self)
+        item_destroy(self)
         bucket_destroy(self)
         instance_destroy(self)
 

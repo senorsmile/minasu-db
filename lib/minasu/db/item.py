@@ -17,28 +17,28 @@ class item():
         self.item_name = item_name
         self.item_content = item_content
 
-    def item_list(self):
+    def list(self):
         ''' list all the items in the bucket
         '''
         return [x for x in os.listdir(self.bucket_path)]
 
-    def item_read(self):
+    def read(self):
         ''' return the item content
         '''
         pass
 
-    def item_edit(self):
+    def edit(self):
         ''' create or edit an item and its content
         '''
-        f = open(self.bucket_path + "/" + self.item + ".yml", mode='a')
-        if self.content != None:
-            f.write(self.item_content)
-        else:
+        f = open(self.bucket_path + "/" + self.item_name + ".yml", mode='a')
+        if self.item_content is None:
             f.write('---')
+        else:
+            f.write(self.item_content)
         f.close()
 
-    def item_delete(self):
+    def delete(self):
         ''' delete item in the bucket
         '''
-        os.remove(self.bucket_path + "/" + self.item + ".yml")
+        os.remove(self.bucket_path + "/" + self.item_name + ".yml")
         return True
