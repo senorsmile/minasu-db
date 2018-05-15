@@ -12,7 +12,7 @@ import unittest
 # -----------------
 # get realpath, go up dir then add lib to sys.path
 sys.path.append(os.path.dirname(os.path.realpath(__file__)).rsplit("/",1)[0] + '/lib/')
-from minasu.db import db, bucket, bucket_item
+from minasu.db import db
 from minasu    import settings
 
 # -----------------
@@ -25,6 +25,7 @@ test_data = dict(
   B='b',
   C='c'
 )
+
 
 def instance_load(obj):
     # Verify does NOT exist (yet)
@@ -57,13 +58,25 @@ def bucket_create(obj):
         obj.assertTrue(os.path.exists(obj.bucket_path))
 
 
+def item_create(obj):
+        # Verify item does NOT exist
+        obj.assertFalse(os.path.exists(obj.item_path))
+
+        # create bucket
+        obj.test_instance.bucket(obj.bucket_name).create()
+        # create item
+        obj.test_instance.bucket().item(obj.item_name).create()
+
+        # Verify bucket DOES exist
+        obj.assertTrue(os.path.exists(obj.bucket_path.item_path))
+
+
 def bucket_destroy(obj):
         # destroy bucket
         obj.test_instance.bucket(obj.bucket_name).destroy()
 
         # Verify bucket does NOT exist
         obj.assertFalse(os.path.exists(obj.bucket_path))
-
 
 
 class TestMinamu(unittest.TestCase):
@@ -80,6 +93,7 @@ class TestMinamu(unittest.TestCase):
         self.bucket_name = "bucket1"
         self.bucket_path = self.instance_path + "/" + self.bucket_name
         self.bucket_item = "file1"
+        self.item_path = self.bucket_path + "/" + self.bucket_item + ".yml"
 
 
     def test_instance_load_create_destroy(self):
@@ -118,8 +132,9 @@ class TestMinamu(unittest.TestCase):
         instance_load(self)
 
         bucket_create(self)
-        bucket_item.bucket_item.item_edit(self.bucket_path, self.bucket_item)
-        bucket_item.bucket_item.item_delete(self.bucket_path, self.bucket_item)
+
+        item_create(self)
+        #item_destroy(self)
         bucket_destroy(self)
         instance_destroy(self)
 

@@ -91,7 +91,7 @@ class db():
 
     def unload(self):
         ''''
-        - verify that queue is empty 
+        - verify that queue is empty
         - remove lockdir
         - clear self.data
         - manually close the open file?
@@ -100,11 +100,9 @@ class db():
 
         '''
         pass
-    
 
     def bucket(
         self,
         bucket_name=None
     ):
         return bucket_module.bucket(self,bucket_name)
-
