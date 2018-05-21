@@ -75,10 +75,9 @@ def bucket_destroy(obj):
 def bucket_list(obj):
     print("bucket list:")
     print(
-        obj
-        .test_instance
-        .bucket("")
-        .list()
+        obj.test_instance
+           .bucket("")
+           .list()
     )
 
 
@@ -107,11 +106,10 @@ def item_destroy(obj):
 def item_list(obj):
     print("item list:")
     print(
-        obj
-        .test_instance
-        .bucket(obj.bucket_name)
-        .item(obj.item_name)
-        .list()
+        obj.test_instance
+           .bucket(obj.bucket_name)
+           .item(obj.item_name)
+           .list()
     )
 
 

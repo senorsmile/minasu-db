@@ -3,13 +3,8 @@
 #########################
 
 from lib.minasu.db import db
-
-
-
 instance = db(instance_name="test_instance",instance_dir="/tmp/tests")
-
 dir(instance)
-
 instance.load()
 
 instance.bucket("bucket5").create()
@@ -35,7 +30,8 @@ bucket7.create()
 # lists ALL buckets
 bucket7.list() 
 # list all items
-bucket7.item("").list()
+bucket7.item("")
+       .list()
 # destroy bucket7
 bucket7.destroy() 
 # still lists all buckets
