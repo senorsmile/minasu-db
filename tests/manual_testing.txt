@@ -13,9 +13,9 @@ dir(instance)
 instance.load()
 
 instance.bucket("bucket5").create()
-instance.bucket().list()
+instance.bucket("").list()
 instance.bucket("bucket5").destroy()
-instance.bucket().list()
+instance.bucket("").list()
 
 bucket6 = instance.bucket("bucket6")
 bucket6.create()
