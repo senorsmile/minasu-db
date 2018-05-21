@@ -17,10 +17,28 @@ instance.bucket("").list()
 instance.bucket("bucket5").destroy()
 instance.bucket("").list()
 
-bucket6 = instance.bucket("bucket6")
-bucket6.create()
-bucket6.list() # lists ALL buckets
-bucket6.destroy()
-bucket6.list() # still lists all buckets
+# prep bucket6
+bucket6 = instance.bucket("bucket6") 
+# create bucket6
+bucket6.create() 
+# lists ALL buckets
+bucket6.list() 
+# destroy bucket6
+bucket6.destroy() 
+# still lists all buckets
+bucket6.list() 
+
+# prep bucket7
+bucket7 = instance.bucket("bucket7")
+# create bucket7
+bucket7.create()
+# lists ALL buckets
+bucket7.list() 
+# list all items
+bucket7.item("").list()
+# destroy bucket7
+bucket7.destroy() 
+# still lists all buckets
+bucket7.list() 
 
 instance.destroy()
