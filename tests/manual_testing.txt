@@ -30,7 +30,8 @@ bucket7.create()
 # lists ALL buckets
 bucket7.list() 
 # list all items
-bucket7.item("")
+    # backslash only needed in the repl
+bucket7.item("") \
        .list()
 # destroy bucket7
 bucket7.destroy() 
