@@ -54,43 +54,44 @@ def instance_destroy(obj):
 
 #### BUCKET
 def bucket_create(obj):
-        # Verify bucket does NOT exist
-        obj.assertFalse(os.path.exists(obj.bucket_path))
+    # Verify bucket does NOT exist
+    obj.assertFalse(os.path.exists(obj.bucket_path))
 
-        # create bucket
-        obj.test_instance.bucket(obj.bucket_name).create()
+    # create bucket
+    obj.test_instance.bucket(obj.bucket_name).create()
 
-        # Verify bucket DOES exist
-        obj.assertTrue(os.path.exists(obj.bucket_path))
+    # Verify bucket DOES exist
+    obj.assertTrue(os.path.exists(obj.bucket_path))
 
 
 def bucket_destroy(obj):
-        # destroy bucket
-        obj.test_instance.bucket(obj.bucket_name).destroy()
+    # destroy bucket
+    obj.test_instance.bucket(obj.bucket_name).destroy()
 
-        # Verify bucket does NOT exist
-        obj.assertFalse(os.path.exists(obj.bucket_path))
+    # Verify bucket does NOT exist
+    obj.assertFalse(os.path.exists(obj.bucket_path))
 
 
 #### ITEM
 def item_create(obj):
-        # Verify item does NOT exist
-        obj.assertFalse(os.path.exists(obj.item_path))
+    # Verify item does NOT exist
+    obj.assertFalse(os.path.exists(obj.item_path))
 
-        # create bucket
-        obj.test_instance.bucket(obj.bucket_name).create()
-        # create item
-        obj.test_instance.bucket(obj.bucket_name).item(obj.item_name).edit()
+    # create bucket
+    obj.test_instance.bucket(obj.bucket_name).create()
+    # create item
+    obj.test_instance.bucket(obj.bucket_name).item(obj.item_name).edit()
 
-        # Verify item DOES exist
-        obj.assertTrue(os.path.exists(obj.item_path), msg=obj.item_path)
+    # Verify item DOES exist
+    obj.assertTrue(os.path.exists(obj.item_path), msg=obj.item_path)
 
 
 def item_destroy(obj):
-        # destroy item
-        obj.test_instance.bucket(obj.bucket_name).item(obj.item_name).delete()
-        # Verify item does NOT exist
-        obj.assertFalse(os.path.exists(obj.item_path))
+    # destroy item
+    obj.test_instance.bucket(obj.bucket_name).item(obj.item_name).delete()
+
+    # Verify item does NOT exist
+    obj.assertFalse(os.path.exists(obj.item_path))
 
 
 
