@@ -27,6 +27,11 @@ test_data = dict(
 )
 
 
+#-------------------
+# reusable functions
+#-------------------
+
+#### INSTANCE
 def instance_load(obj):
     # Verify does NOT exist (yet)
     obj.assertFalse(os.path.exists(obj.instance_path))
@@ -47,6 +52,7 @@ def instance_destroy(obj):
     obj.assertFalse(os.path.exists(obj.instance_path))
 
 
+#### BUCKET
 def bucket_create(obj):
         # Verify bucket does NOT exist
         obj.assertFalse(os.path.exists(obj.bucket_path))
@@ -58,6 +64,15 @@ def bucket_create(obj):
         obj.assertTrue(os.path.exists(obj.bucket_path))
 
 
+def bucket_destroy(obj):
+        # destroy bucket
+        obj.test_instance.bucket(obj.bucket_name).destroy()
+
+        # Verify bucket does NOT exist
+        obj.assertFalse(os.path.exists(obj.bucket_path))
+
+
+#### ITEM
 def item_create(obj):
         # Verify item does NOT exist
         obj.assertFalse(os.path.exists(obj.item_path))
@@ -78,14 +93,10 @@ def item_destroy(obj):
         obj.assertFalse(os.path.exists(obj.item_path))
 
 
-def bucket_destroy(obj):
-        # destroy bucket
-        obj.test_instance.bucket(obj.bucket_name).destroy()
 
-        # Verify bucket does NOT exist
-        obj.assertFalse(os.path.exists(obj.bucket_path))
-
-
+#-----------------
+# main test class
+#-----------------
 class TestMinamu(unittest.TestCase):
     def setUp(self):
         self.instance_name = "test_instance"
@@ -115,6 +126,7 @@ class TestMinamu(unittest.TestCase):
         ##if not os.path.exists(self.bucket_path):
         ##    os.makedirs(self.bucket_path)
         bucket_create(self)
+        bucket_list(self)
         bucket_destroy(self)
 
 
@@ -135,6 +147,7 @@ class TestMinamu(unittest.TestCase):
 
         instance_destroy(self)
 
+
     def test_item_create_destroy(self):
         instance_load(self)
         bucket_create(self)
@@ -144,5 +157,8 @@ class TestMinamu(unittest.TestCase):
         instance_destroy(self)
 
 
+#-----------------
+# run it!
+#-----------------
 if __name__ == '__main__':
     unittest.main()
