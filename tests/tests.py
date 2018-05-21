@@ -137,9 +137,7 @@ class TestMinamu(unittest.TestCase):
 
     def test_item_create_destroy(self):
         instance_load(self)
-
         bucket_create(self)
-
         item_create(self)
         item_destroy(self)
         bucket_destroy(self)
