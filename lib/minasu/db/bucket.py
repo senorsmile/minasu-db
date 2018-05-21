@@ -30,6 +30,7 @@ class bucket():
             os.makedirs(bucket_path)
             return True
 
+
     def destroy(self):
         bucket_path = self.instance_object.instance_path + "/" + self.bucket_name
 
@@ -38,6 +39,7 @@ class bucket():
             return True
         else:
             return False
+
 
     def item(
         self,
@@ -49,4 +51,4 @@ class bucket():
             self.bucket_path,
             item_name,
             item_content
-            )
+        )
