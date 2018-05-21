@@ -72,6 +72,11 @@ def bucket_destroy(obj):
     obj.assertFalse(os.path.exists(obj.bucket_path))
 
 
+def bucket_list(obj):
+    print("bucket list:")
+    print(obj.test_instance.bucket("").list())
+
+
 #### ITEM
 def item_create(obj):
     # Verify item does NOT exist
