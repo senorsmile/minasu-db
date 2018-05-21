@@ -44,11 +44,11 @@ class bucket():
     def item(
         self,
         item_name=None,
-        item_content=None
+        #item_content=None
     ):
         return item_module.item(
             self.bucket_name,
             self.bucket_path,
             item_name,
-            item_content
+            #item_content,
         )

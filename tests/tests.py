@@ -74,7 +74,12 @@ def bucket_destroy(obj):
 
 def bucket_list(obj):
     print("bucket list:")
-    print(obj.test_instance.bucket("").list())
+    print(
+        obj
+        .test_instance
+        .bucket("")
+        .list()
+    )
 
 
 #### ITEM
@@ -98,6 +103,16 @@ def item_destroy(obj):
     # Verify item does NOT exist
     obj.assertFalse(os.path.exists(obj.item_path))
 
+
+def item_list(obj):
+    print("item list:")
+    print(
+        obj
+        .test_instance
+        .bucket(obj.bucket_name)
+        .item(obj.item_name)
+        .list()
+    )
 
 
 #-----------------
@@ -158,6 +173,7 @@ class TestMinamu(unittest.TestCase):
         instance_load(self)
         bucket_create(self)
         item_create(self)
+        item_list(self)
         item_destroy(self)
         bucket_destroy(self)
         instance_destroy(self)
