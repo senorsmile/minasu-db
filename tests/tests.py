@@ -12,7 +12,7 @@ import unittest
 # -----------------
 # get realpath, go up dir then add lib to sys.path
 sys.path.append(os.path.dirname(os.path.realpath(__file__)).rsplit("/",1)[0] + '/lib/')
-from minasu.db import db,bucket
+from minasu.db import db
 from minasu    import settings
 
 # -----------------
@@ -26,6 +26,12 @@ test_data = dict(
   C='c'
 )
 
+
+#-------------------
+# reusable functions
+#-------------------
+
+#### INSTANCE
 def instance_load(obj):
     # Verify does NOT exist (yet)
     obj.assertFalse(os.path.exists(obj.instance_path))
@@ -46,26 +52,70 @@ def instance_destroy(obj):
     obj.assertFalse(os.path.exists(obj.instance_path))
 
 
+#### BUCKET
 def bucket_create(obj):
-        # Verify bucket does NOT exist
-        obj.assertFalse(os.path.exists(obj.bucket_path))
+    # Verify bucket does NOT exist
+    obj.assertFalse(os.path.exists(obj.bucket_path))
 
-        # create bucket
-        obj.test_instance.bucket(obj.bucket_name).create()
+    # create bucket
+    obj.test_instance.bucket(obj.bucket_name).create()
 
-        # Verify bucket DOES exist
-        obj.assertTrue(os.path.exists(obj.bucket_path))
+    # Verify bucket DOES exist
+    obj.assertTrue(os.path.exists(obj.bucket_path))
 
 
 def bucket_destroy(obj):
-        # destroy bucket
-        obj.test_instance.bucket(obj.bucket_name).destroy()
+    # destroy bucket
+    obj.test_instance.bucket(obj.bucket_name).destroy()
 
-        # Verify bucket does NOT exist
-        obj.assertFalse(os.path.exists(obj.bucket_path))
+    # Verify bucket does NOT exist
+    obj.assertFalse(os.path.exists(obj.bucket_path))
 
 
+def bucket_list(obj):
+    print("bucket list:")
+    print(
+        obj.test_instance
+           .bucket("")
+           .list()
+    )
 
+
+#### ITEM
+def item_create(obj):
+    # Verify item does NOT exist
+    obj.assertFalse(os.path.exists(obj.item_path))
+
+    # create bucket
+    obj.test_instance.bucket(obj.bucket_name).create()
+    # create item
+    obj.test_instance.bucket(obj.bucket_name).item(obj.item_name).edit()
+
+    # Verify item DOES exist
+    obj.assertTrue(os.path.exists(obj.item_path), msg=obj.item_path)
+
+
+def item_destroy(obj):
+    # destroy item
+    obj.test_instance.bucket(obj.bucket_name).item(obj.item_name).delete()
+
+    # Verify item does NOT exist
+    obj.assertFalse(os.path.exists(obj.item_path))
+
+
+def item_list(obj):
+    print("item list:")
+    print(
+        obj.test_instance
+           .bucket(obj.bucket_name)
+           .item(obj.item_name)
+           .list()
+    )
+
+
+#-----------------
+# main test class
+#-----------------
 class TestMinamu(unittest.TestCase):
     def setUp(self):
         self.instance_name = "test_instance"
@@ -79,6 +129,8 @@ class TestMinamu(unittest.TestCase):
 
         self.bucket_name = "bucket1"
         self.bucket_path = self.instance_path + "/" + self.bucket_name
+        self.item_name = "file1"
+        self.item_path = self.bucket_path + "/" + self.item_name + ".yml"
 
 
     def test_instance_load_create_destroy(self):
@@ -93,6 +145,7 @@ class TestMinamu(unittest.TestCase):
         ##if not os.path.exists(self.bucket_path):
         ##    os.makedirs(self.bucket_path)
         bucket_create(self)
+        bucket_list(self)
         bucket_destroy(self)
 
 
@@ -111,10 +164,21 @@ class TestMinamu(unittest.TestCase):
 #        # verify test_data matches
 #        self.assertEqual(results['buckets']['bucket1']['file1.yml'], test_data)
 
-
-
         instance_destroy(self)
 
 
+    def test_item_create_destroy(self):
+        instance_load(self)
+        bucket_create(self)
+        item_create(self)
+        item_list(self)
+        item_destroy(self)
+        bucket_destroy(self)
+        instance_destroy(self)
+
+
+#-----------------
+# run it!
+#-----------------
 if __name__ == '__main__':
     unittest.main()
