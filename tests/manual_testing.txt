@@ -7,6 +7,10 @@ instance = db(instance_name="test_instance",instance_dir="/tmp/tests")
 dir(instance)
 instance.load()
 
+#-------------------
+# chain bucket via instance
+#-------------------
+    # backslash only needed in the repl
 instance.bucket("bucket5") \
         .create()
 instance.bucket("") \
@@ -16,30 +20,56 @@ instance.bucket("bucket5") \
 instance.bucket("") \
         .list()
 
+
+
+
+#-------------------
+# separate bucket object
+#-------------------
 # prep bucket6
 bucket6 = instance.bucket("bucket6") 
+
 # create bucket6
 bucket6.create() 
+
 # lists ALL buckets
 bucket6.list() 
+
 # destroy bucket6
-bucket6.destroy() 
+bucket6.destroy()
+
 # still lists all buckets
 bucket6.list() 
 
+
+
+
+#-------------------
+# items 
+#-------------------
 # prep bucket7
 bucket7 = instance.bucket("bucket7")
+
 # create bucket7
 bucket7.create()
+
 # lists ALL buckets
 bucket7.list() 
+
 # list all items
-    # backslash only needed in the repl
 bucket7.item("") \
        .list()
+
 # destroy bucket7
 bucket7.destroy() 
+
 # still lists all buckets
 bucket7.list() 
 
+
+
+
+#-------------------
+# destroy entire instance
+#-------------------
 instance.destroy()
