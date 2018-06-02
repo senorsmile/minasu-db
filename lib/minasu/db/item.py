@@ -1,4 +1,5 @@
 import os
+import yaml
 
 
 class item():
@@ -14,7 +15,8 @@ class item():
         self.bucket_name = bucket_name
         self.bucket_path = bucket_path
         self.item_name = item_name
-        self.item_content = None # i.e. not yet read or written
+        self.item_path = self.bucket_path + "/" + self.item_name + ".yml"
+        self.content = None # i.e. not yet read or written
 
 
     def list(self):
@@ -27,25 +29,37 @@ class item():
         ''' return the item content
         '''
         # TODO: implement me
-        pass
+        if os.path.isfile(self.item_path):
+            f = open(self.item_path, mode='r')
+
+            content = yaml.load(f)
+
+            return content
+
+        else:
+            return None
 
 
     def edit(
             self,
-            item_content=None,
+            content=None,
     ):
         ''' create or edit an item and its content
         '''
-        self.item_content = item_content
+        self.content = content
 
-        f = open(self.bucket_path + "/" + self.item_name + ".yml", mode='a')
+        f = open(self.item_path, mode='w')
 
-        if self.item_content is None:
-            #f.write('---') # do not overwrite the file
+        if self.content is None:
             # None means that we haven't read the item yet either
+            #f.write('---') # do not overwrite the file
             pass
         else:
-            f.write(self.item_content)
+            f.write(
+                yaml.dump(
+                    self.content
+                )
+            )
 
         f.close()
 

@@ -7,6 +7,9 @@ instance = db(instance_name="test_instance",instance_dir="/tmp/tests")
 dir(instance)
 instance.load()
 
+
+
+
 #-------------------
 # chain bucket via instance
 #-------------------
@@ -57,8 +60,22 @@ bucket7.create()
 bucket7.list() 
 
 # list all items
-bucket7.item("") \
-       .list()
+bucket7.item("").list()
+
+# read item content
+bucket7.item(item_name="item8").read()
+
+# edit item content
+bucket7.item(item_name="item8").edit(content={"foo": "bar"})
+
+# read item content again
+bucket7.item(item_name="item8").read()
+
+# delete the item
+bucket7.item(item_name="item8").delete()
+
+# try to read item content again
+bucket7.item(item_name="item8").read()
 
 # destroy bucket7
 bucket7.destroy() 

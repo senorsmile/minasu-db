@@ -43,7 +43,7 @@ class bucket():
 
     def item(
         self,
-        item_name=None,
+        item_name,
         #item_content=None
     ):
         return item_module.item(
