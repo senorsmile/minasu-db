@@ -30,9 +30,14 @@ class item():
         pass
 
 
-    def edit(self):
+    def edit(
+            self,
+            item_content=None,
+    ):
         ''' create or edit an item and its content
         '''
+        self.item_content = item_content
+
         f = open(self.bucket_path + "/" + self.item_name + ".yml", mode='a')
 
         if self.item_content is None:
