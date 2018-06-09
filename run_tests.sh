@@ -5,4 +5,4 @@
 #  pip install pipenv
 #}
 
-pipenv run python tests/tests.py
+pipenv run python3 tests/tests.py
